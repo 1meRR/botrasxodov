@@ -54,3 +54,33 @@ python main.py
 - Проект рассчитан на локальное использование.
 - Для некоторых действий может потребоваться запуск от имени пользователя с нужными правами.
 - `pyautogui` управляет активным окном — перед автопечатью и хоткеями убедитесь, что фокус в нужном приложении.
+
+
+## Сборка в `.exe` (Windows)
+
+Самый простой путь — через **PyInstaller**.
+
+### Вариант 1: готовый bat-скрипт
+В папке проекта есть `build_exe.bat`:
+```bat
+cd windows_assistant
+build_exe.bat
+```
+После сборки файл будет в:
+- `windows_assistant\dist\WindowsVoiceAssistant.exe`
+
+### Вариант 2: вручную
+```bat
+cd windows_assistant
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+pip install pyinstaller==6.9.0
+
+pyinstaller --noconfirm --clean --name WindowsVoiceAssistant --onefile --console --collect-all vosk --hidden-import pyttsx3.drivers.sapi5 main.py
+```
+
+### Что важно для запуска `.exe`
+1. Папка с моделью Vosk должна быть рядом с EXE в ожидаемом пути:
+   - `models\vosk-model-small-ru-0.22`
+2. Если не нужна офлайн-модель, можно отключить `use_vosk_offline` в `config.py`.
+3. Для работы микрофона и автодействий (клавиатура/мышь) запускайте от пользователя с нужными правами.
